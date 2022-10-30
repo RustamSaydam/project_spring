@@ -1,34 +1,37 @@
 package ru.saydam.spring;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import org.springframework.beans.factory.annotation.Value;
+
+import java.util.List;
 import java.util.Random;
 
 
-@Component
 public class MusicPlayer {
-    private ClassicalMusic classicalMusic;
-    private RockMusic rockMusic;
+    @Value("${musicPlayer.name}")
+    private String name;
 
-    @Autowired
-    public MusicPlayer(ClassicalMusic classicalMusic, RockMusic rockMusic) {
-        this.classicalMusic = classicalMusic;
-        this.rockMusic = rockMusic;
+    @Value("${musicPlayer.volume}")
+    private int volume;
+
+    private List<Music> musicList;
+
+    public MusicPlayer(List<Music> musicList) {
+        this.musicList = musicList;
     }
-        /* случайное число между 0 и 2 */
-    public void playMusic(MusicGenre genre) {
+
+    public String getName() {
+        return name;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public String playMusic() {
         Random random = new Random();
 
-
-        int randomNumber = random.nextInt(3);
-
-        if (genre == MusicGenre.ROCK) {
-            /* Random Rock music */
-            System.out.println(rockMusic.getSongs().get(randomNumber));
-        } else {
-            /* Random Classical Music */
-            System.out.println(classicalMusic.getSongs().get(randomNumber));
-        }
+        return "Playing: " + musicList.get(random.nextInt(musicList.size())).getSong()
+        + "with volume " + this.volume;
     }
 }
